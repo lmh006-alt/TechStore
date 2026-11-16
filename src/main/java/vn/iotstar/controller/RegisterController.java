@@ -50,7 +50,11 @@ public class RegisterController extends HttpServlet {
             boolean success = service.register(username, password, email, fullname, phone);
 
             if (success) {
-                resp.sendRedirect(req.getContextPath() + "/login");
+                resp.sendRedirect(req.getContextPath()
+                        + "/verify-otp?username="
+                        + java.net.URLEncoder.encode(
+                                username,
+                                java.nio.charset.StandardCharsets.UTF_8));
                 return;
             }
 

@@ -1,3 +1,5 @@
+CREATE DATABASE  IF NOT EXISTS `banhang` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci */ /*!80016 DEFAULT ENCRYPTION='N' */;
+USE `banhang`;
 -- MySQL dump 10.13  Distrib 8.0.45, for Win64 (x86_64)
 --
 -- Host: localhost    Database: banhang
@@ -16,24 +18,14 @@
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
 --
--- Table structure for table `category`
+-- Dumping data for table `categories`
 --
-CREATE DATABASE IF NOT EXISTS BanHang
-CHARACTER SET utf8mb4
-COLLATE utf8mb4_unicode_ci;
 
-USE BanHang;
-
-DROP TABLE IF EXISTS `category`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `category` (
-  `cate_id` int NOT NULL AUTO_INCREMENT,
-  `cate_name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `icons` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  PRIMARY KEY (`cate_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
+LOCK TABLES `categories` WRITE;
+/*!40000 ALTER TABLE `categories` DISABLE KEYS */;
+INSERT INTO `categories` VALUES (1,'Iphone','iphone.jpg',1);
+/*!40000 ALTER TABLE `categories` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Dumping data for table `category`
@@ -46,34 +38,12 @@ INSERT INTO `category` VALUES (2,'Điện thoại','phone.png'),(3,'Laptop','lap
 UNLOCK TABLES;
 
 --
--- Table structure for table `user`
---
-
-DROP TABLE IF EXISTS `user`;
-/*!40101 SET @saved_cs_client     = @@character_set_client */;
-/*!50503 SET character_set_client = utf8mb4 */;
-CREATE TABLE `user` (
-  `id` int NOT NULL AUTO_INCREMENT,
-  `email` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `username` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `fullname` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `password` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `avatar` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `roleid` int DEFAULT '2',
-  `phone` varchar(20) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `createdDate` datetime DEFAULT CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`),
-  UNIQUE KEY `email` (`email`),
-  UNIQUE KEY `username` (`username`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-/*!40101 SET character_set_client = @saved_cs_client */;
-
---
 -- Dumping data for table `user`
 --
 
 LOCK TABLES `user` WRITE;
 /*!40000 ALTER TABLE `user` DISABLE KEYS */;
+INSERT INTO `user` VALUES (1,'hoang0347373783@gmail.com','hoang','lmh','u5qhkT2ucH34oMyd6AYndw==:tgcWP/9nMT4XDueM+olyuSwGehKJHYKaZV+tmNQ0ZRw=',NULL,2,'0349461264','2026-11-10 14:16:10',0,NULL,NULL,NULL,NULL),(2,'lhdeptrai.16082006@gmail.com','lmh','lmh','qnIA/siAbMHzyHSrhaic2Q==:yobYsYse3CS2sminwILOgRAdSNn5mHI09LhRvqArw1o=',NULL,2,'0349461264','2026-11-16 14:30:15',1,NULL,NULL,NULL,NULL),(3,'leminhhoang.16082006@gmail.com','test','lmh','KyjbpLMPb8PSagaaRHDSag==:Rmnb74/QsLFfOMAd9OKFAi9Gqc5DwSfME4mBhaVHpNQ=',NULL,2,'0349461264','2026-11-16 15:03:39',1,NULL,NULL,NULL,NULL);
 /*!40000 ALTER TABLE `user` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -90,4 +60,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2026-11-10 15:11:29
+-- Dump completed on 2026-11-16 15:09:41

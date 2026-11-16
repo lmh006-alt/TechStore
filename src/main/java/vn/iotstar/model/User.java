@@ -15,7 +15,12 @@ public class User implements Serializable {
     private int roleid;
     private String phone;
     private Date createdDate;
-
+    private boolean active;
+    private String otpCode;
+    private Date otpExpiry;
+    private String resetOtpCode;
+    private Date resetOtpExpiry;
+    
     public User() {
     }
 
@@ -90,4 +95,43 @@ public class User implements Serializable {
     public void setCreatedDate(Date createdDate) {
         this.createdDate = createdDate;
     }
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public String getOtpCode() {
+        return otpCode;
+    }
+
+    public void setOtpCode(String otpCode) {
+        this.otpCode = otpCode;
+    }
+
+    public Date getOtpExpiry() {
+        return otpExpiry;
+    }
+
+    public void setOtpExpiry(Date otpExpiry) {
+        this.otpExpiry = otpExpiry;
+    }
+
+	public String getResetOtpCode() {
+	    return resetOtpCode;
+	}
+	
+	public void setResetOtpCode(String resetOtpCode) {
+	    this.resetOtpCode = resetOtpCode;
+	}
+	
+	public Date getResetOtpExpiry() {
+	    return resetOtpExpiry;
+	}
+	
+	public void setResetOtpExpiry(Date resetOtpExpiry) {
+	    this.resetOtpExpiry = resetOtpExpiry;
+	}
 }
