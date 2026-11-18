@@ -9,7 +9,6 @@ import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
-
 import vn.iotstar.model.User;
 import vn.iotstar.service.UserService;
 import vn.iotstar.service.impl.UserServiceImpl;
@@ -69,6 +68,7 @@ public class LoginController extends HttpServlet {
 
         HttpSession session = req.getSession(true);
         session.setAttribute("account", user.getUserName());
+        session.setAttribute("userId", user.getId());
         session.setMaxInactiveInterval(30 * 60);
 
         Cookie cookie = new Cookie("rememberedUsername", "on".equals(remember) ? user.getUserName() : "");
