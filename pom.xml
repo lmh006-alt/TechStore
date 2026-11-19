@@ -3,9 +3,10 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>vn.iotstar</groupId>
-	<artifactId>WebAssignmentJPA</artifactId>
+	<artifactId>TechStore</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
+	<name>TechStore</name>
 	<properties>
 		<maven.compiler.release>17</maven.compiler.release>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -55,7 +56,7 @@
 		</dependency>
 	</dependencies>
 	<build>
-		<finalName>WebAssignmentJPA</finalName>
+		<finalName>TechStore</finalName>
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>

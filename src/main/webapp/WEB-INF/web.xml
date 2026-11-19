@@ -2,7 +2,7 @@
 <web-app xmlns="https://jakarta.ee/xml/ns/jakartaee"
     version="6.0">
 
-    <display-name>WebAssignmentJPA</display-name>
+    <display-name>TechStore</display-name>
 
     <filter>
         <filter-name>sitemesh</filter-name>
