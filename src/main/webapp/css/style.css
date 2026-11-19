@@ -90,7 +90,7 @@ img, video {
 
 /* ==================== NAVIGATION ==================== */
 
-.navbar {
+.site-nav {
     background: var(--navy);
 }
 
@@ -103,7 +103,7 @@ img, video {
     overflow-x: auto;
 }
 
-.navbar a {
+.site-nav a {
     display: block;
     padding: 16px 20px;
     color: #bdcbe0;
@@ -112,8 +112,8 @@ img, video {
     border-bottom: 3px solid transparent;
 }
 
-.navbar a:hover,
-.navbar a.active {
+.site-nav a:hover,
+.site-nav a.active {
     color: white;
     background: rgba(255, 255, 255, 0.05);
     border-bottom-color: #60a5fa;
@@ -184,6 +184,10 @@ button {
     transition: background 0.2s;
 }
 
+.btn-primary {
+    --bs-btn-active-bg: var(--primary-hover);
+}
+
 .btn:hover,
 button:hover {
     background: var(--primary-hover);
@@ -215,10 +219,6 @@ button:hover {
 
 .btn-danger:hover {
     background: #fee2e2;
-}
-
-.btn-block {
-    width: 100%;
 }
 
 /* ==================== HOME HERO ==================== */
@@ -464,30 +464,23 @@ textarea {
 
 /* ==================== TABLES ==================== */
 
-.table-wrapper {
-    overflow-x: auto;
-}
-
-table {
-    width: 100%;
-    border-collapse: collapse;
+.category-table {
+    --bs-table-color: var(--text);
+    --bs-table-border-color: var(--border);
+    --bs-table-hover-color: var(--text);
+    --bs-table-hover-bg: #f8fafc;
     text-align: left;
 }
 
-th, td {
+.category-table > :not(caption) > * > * {
     padding: 16px;
-    border-bottom: 1px solid var(--border);
 }
 
-th {
-    background: #f8fafc;
+.category-table thead th {
+    --bs-table-bg: #f8fafc;
     color: var(--muted);
     font-size: 13px;
     text-transform: uppercase;
-}
-
-tbody tr:hover {
-    background: #f8fafc;
 }
 
 .table-actions {
@@ -681,7 +674,7 @@ body.auth-page {
         padding: 0 8px;
     }
 
-    .navbar a {
+    .site-nav a {
         padding: 14px;
         font-size: 13px;
     }
@@ -769,7 +762,7 @@ button:focus-visible,
     outline-offset: 3px;
 }
 
-.navbar a:focus-visible {
+.site-nav a:focus-visible {
     outline-color: #bfdbfe;
     outline-offset: -4px;
 }
@@ -863,7 +856,7 @@ button:focus-visible,
 
 input[type="file"]::file-selector-button {
     padding: 6px 10px;
-    margin-right: 10px;
+    margin: 0 10px 0 0;
     background: #eaf0fb;
     color: var(--primary);
     border: 0;

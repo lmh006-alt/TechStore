@@ -4,36 +4,14 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Video của tôi | TechStore</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
-<body class="site-page">
-    <header class="site-header">
-        <div class="header-inner">
-            <a class="logo" href="${pageContext.request.contextPath}/home">Tech<span>Store</span></a>
-            <div class="header-account">
-                <span>Xin chào, <strong><c:out value="${sessionScope.account}"/></strong></span>
-                <form action="${pageContext.request.contextPath}/logout" method="post">
-                    <button class="btn btn-outline" type="submit">Đăng xuất</button>
-                </form>
-            </div>
-        </div>
-    </header>
-    <nav class="navbar" aria-label="Điều hướng chính">
-        <div class="nav-inner">
-            <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-            <a href="${pageContext.request.contextPath}/categories">Quản lý danh mục</a>
-            <a href="${pageContext.request.contextPath}/home#reviews">Video đánh giá</a>
-            <a class="active" aria-current="page" href="${pageContext.request.contextPath}/video">Video của tôi</a>
-        </div>
-    </nav>
+<body>
     <main class="page-container">
 
         <div class="page-heading">
             <h1>Video của tôi</h1>
-            <a class="btn" href="${pageContext.request.contextPath}/video?action=add">+ Đăng video</a>
+            <a class="btn btn-primary" href="${pageContext.request.contextPath}/video?action=add">+ Đăng video</a>
         </div>
 
         <c:if test="${empty videos}">
@@ -43,10 +21,10 @@
             </div>
         </c:if>
 
-        <div class="video-grid">
+        <div class="video-grid d-grid gap-4">
             <c:forEach var="video" items="${videos}">
 
-                <article class="video-card">
+                <article class="video-card card">
 
                     <video preload="metadata" controls>
                         <source 
@@ -54,7 +32,7 @@
                             type="video/mp4">
                     </video>
 
-                    <div class="video-info">
+                    <div class="video-info card-body">
                         <h2>
                             <a href="${pageContext.request.contextPath}/video?action=detail&id=${video.id}">
                                 <c:out value="${video.title}"/>
@@ -105,9 +83,5 @@
             </nav>
         </c:if>
     </main>
-    <footer class="site-footer">
-        <strong>TechStore &copy; 2026</strong>
-        <p>Khám phá công nghệ cùng cộng đồng.</p>
-    </footer>
 </body>
 </html>

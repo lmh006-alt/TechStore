@@ -39,6 +39,8 @@ public class ForgotPasswordController extends HttpServlet {
 
         if (username == null || username.isBlank()) {
             request.setAttribute("error", "Vui lòng nhập tên đăng nhập");
+        } else if (username.length() > 255) {
+            request.setAttribute("error", "Tên đăng nhập tối đa 255 ký tự.");
         } else if (userService.sendResetOTP(username.trim())) {
             response.sendRedirect(request.getContextPath()
                     + "/reset-password?username="

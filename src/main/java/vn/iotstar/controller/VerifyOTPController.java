@@ -38,14 +38,15 @@ public class VerifyOTPController extends HttpServlet {
         String username = req.getParameter("username");
         String otp = req.getParameter("otp");
 
-        if (username == null || username.isBlank()
-                || otp == null || !otp.matches("\\d{6}")) {
-            req.setAttribute("alert", "Thong tin OTP khong hop le");
+        if (username == null || username.isBlank() || username.length() > 255) {
+            req.setAttribute("alert", "Vui lòng nhập tên đăng nhập tối đa 255 ký tự.");
+        } else if (otp == null || !otp.matches("[0-9]{6}")) {
+            req.setAttribute("alert", "Mã OTP phải gồm đúng 6 chữ số.");
         } else if (service.verifyOTP(username.trim(), otp)) {
             resp.sendRedirect(req.getContextPath() + "/login");
             return;
         } else {
-            req.setAttribute("alert", "OTP sai hoac da het han");
+            req.setAttribute("alert", "Mã OTP không đúng hoặc đã hết hạn.");
         }
 
         req.getRequestDispatcher(

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<sitemesh>
+
+    <decorator-prefix>/WEB-INF/decorators/</decorator-prefix>
+
+    <!-- Keep static resources and binary servlet responses outside the decorator. -->
+    <mapping path="/css/*" exclude="true"/>
+    <mapping path="/js/*" exclude="true"/>
+    <mapping path="/images/*" exclude="true"/>
+    <mapping path="/category-image" exclude="true"/>
+    <mapping path="/video-stream" exclude="true"/>
+
+    <mapping path="/*" decorator="main.jsp"/>
+
+</sitemesh>

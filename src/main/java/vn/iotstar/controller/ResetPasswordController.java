@@ -42,11 +42,19 @@ public class ResetPasswordController extends HttpServlet {
         String confirmPassword = request.getParameter("confirmPassword");
 
         if (username == null || username.isBlank()
-                || otp == null || newPassword == null
-                || confirmPassword == null) {
+                || otp == null || otp.isBlank() || newPassword == null || newPassword.isBlank()
+                || confirmPassword == null || confirmPassword.isBlank()) {
 
             request.setAttribute("error",
                     "Vui lòng nhập đầy đủ thông tin");
+
+        } else if (username.length() > 255) {
+
+            request.setAttribute("error", "Tên đăng nhập tối đa 255 ký tự.");
+
+        } else if (!otp.matches("[0-9]{6}")) {
+
+            request.setAttribute("error", "Mã OTP phải gồm đúng 6 chữ số.");
 
         } else if (!newPassword.equals(confirmPassword)) {
 
@@ -59,7 +67,7 @@ public class ResetPasswordController extends HttpServlet {
                     "Mật khẩu phải có ít nhất 8 ký tự");
 
         } else if (userService.resetPassword(
-                username.trim(), otp.trim(), newPassword)) {
+                username.trim(), otp, newPassword)) {
 
             response.sendRedirect(
                     request.getContextPath() + "/login");

@@ -5,36 +5,22 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>${empty video ? 'Thêm video' : 'Sửa video'} | TechStore</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
-<body class="site-page">
-    <header class="site-header">
-        <div class="header-inner">
-            <a class="logo" href="${pageContext.request.contextPath}/home">Tech<span>Store</span></a>
-            <div class="header-account">
-                <span>Xin chào, <strong><c:out value="${sessionScope.account}"/></strong></span>
-                <form action="${pageContext.request.contextPath}/logout" method="post">
-                    <button class="btn btn-outline" type="submit">Đăng xuất</button>
-                </form>
-            </div>
-        </div>
-    </header>
-    <nav class="navbar" aria-label="Điều hướng chính">
-        <div class="nav-inner">
-            <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-            <a href="${pageContext.request.contextPath}/categories">Quản lý danh mục</a>
-            <a href="${pageContext.request.contextPath}/home#reviews">Video đánh giá</a>
-            <a href="${pageContext.request.contextPath}/video">Video của tôi</a>
-        </div>
-    </nav>
+<body>
     <main class="page-container page-narrow">
 
         <div class="page-heading"><h1>${empty video ? 'Thêm video' : 'Sửa video'}</h1></div>
 
-        <form class="video-form panel"
+        <c:if test="${not empty videoError}">
+            <div class="error" role="alert"><c:out value="${videoError}"/></div>
+        </c:if>
+        <c:if test="${uploadRejected}">
+            <a class="btn btn-outline" href="${pageContext.request.contextPath}/video">Về Video của tôi</a>
+        </c:if>
+
+        <c:if test="${not uploadRejected}">
+        <form class="video-form panel" data-validate
               action="${pageContext.request.contextPath}/video"
               method="post"
               enctype="multipart/form-data">
@@ -46,15 +32,16 @@
                 <input type="hidden" name="id" value="${video.id}">
             </c:if>
 
-            <label for="videoTitle">Tiêu đề video</label>
+            <label class="form-label" for="videoTitle">Tiêu đề video</label>
 
-            <input type="text" id="videoTitle" name="title"
-                   value="${fn:escapeXml(video.title)}"
-                   maxlength="255" required>
+            <input class="form-control" type="text" id="videoTitle" name="title"
+                   value="${fn:escapeXml(submittedVideo ? submittedTitle : video.title)}"
+                   maxlength="255" data-not-blank required>
 
-            <label for="videoDescription">Mô tả video</label>
+            <label class="form-label" for="videoDescription">Mô tả video</label>
 
-            <textarea id="videoDescription" name="description" rows="5"><c:out value="${video.description}"/></textarea>
+            <textarea class="form-control" id="videoDescription" name="description" rows="5"
+                      maxlength="65535" data-text-bytes="65535"><c:out value="${submittedVideo ? submittedDescription : video.description}"/></textarea>
 
             <c:if test="${not empty video}">
 
@@ -68,17 +55,17 @@
 
             </c:if>
 
-            <label for="videoFile">Chọn tệp video</label>
+            <label class="form-label" for="videoFile">Chọn tệp video</label>
 
             <c:choose>
                 <c:when test="${empty video}">
-                    <input type="file" id="videoFile" name="videoFile" aria-describedby="video-file-help"
-                           accept=".mp4" required>
+                    <input class="form-control" type="file" id="videoFile" name="videoFile" aria-describedby="video-file-help"
+                           accept=".mp4" data-max-bytes="104857600" data-file-message="Chỉ chấp nhận tệp MP4." required>
                 </c:when>
 
                 <c:otherwise>
-                    <input type="file" id="videoFile" name="videoFile" aria-describedby="video-file-help"
-                           accept=".mp4">
+                    <input class="form-control" type="file" id="videoFile" name="videoFile" aria-describedby="video-file-help"
+                           accept=".mp4" data-max-bytes="104857600" data-file-message="Chỉ chấp nhận tệp MP4.">
 
                     <p class="muted">Để trống nếu muốn giữ video hiện tại.</p>
                 </c:otherwise>
@@ -88,7 +75,7 @@
 
             <div class="video-actions">
 
-                <button class="btn" type="submit">Lưu video</button>
+                <button class="btn btn-primary" type="submit">Lưu video</button>
 
                 <a class="btn btn-outline"
                    href="${pageContext.request.contextPath}/video">
@@ -98,10 +85,7 @@
             </div>
 
         </form>
+        </c:if>
     </main>
-    <footer class="site-footer">
-        <strong>TechStore &copy; 2026</strong>
-        <p>Khám phá công nghệ cùng cộng đồng.</p>
-    </footer>
 </body>
 </html>

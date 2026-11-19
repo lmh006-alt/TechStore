@@ -36,7 +36,7 @@ public class LoginController extends HttpServlet {
             }
         }
 
-        req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+        showForm(req, resp);
     }
 
     @Override
@@ -47,17 +47,26 @@ public class LoginController extends HttpServlet {
         String password = req.getParameter("password");
         String remember = req.getParameter("remember");
 
+        req.setAttribute("rememberedUsername", username);
+        req.setAttribute("rememberSelected", "on".equals(remember));
+
         if (username == null || username.isBlank() || password == null || password.isBlank()) {
-            req.setAttribute("alert", "Tai khoan va mat khau khong duoc rong");
-            req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+            req.setAttribute("alert", "Vui lòng nhập tên đăng nhập và mật khẩu.");
+            showForm(req, resp);
+            return;
+        }
+
+        if (username.length() > 255) {
+            req.setAttribute("alert", "Tên đăng nhập tối đa 255 ký tự.");
+            showForm(req, resp);
             return;
         }
 
         User user = service.login(username.trim(), password);
 
         if (user == null) {
-            req.setAttribute("alert", "Tai khoan hoac mat khau khong dung");
-            req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
+            req.setAttribute("alert", "Tên đăng nhập hoặc mật khẩu không đúng.");
+            showForm(req, resp);
             return;
         }
 
@@ -79,5 +88,8 @@ public class LoginController extends HttpServlet {
         resp.addCookie(cookie);
 
         resp.sendRedirect(req.getContextPath() + "/home");
+    }
+    private void showForm(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        req.getRequestDispatcher("/WEB-INF/views/login.jsp").forward(req, resp);
     }
 }

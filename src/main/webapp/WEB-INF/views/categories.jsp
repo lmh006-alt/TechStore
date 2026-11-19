@@ -1,68 +1,56 @@
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <%@ taglib prefix="c" uri="jakarta.tags.core" %>
+<%@ taglib prefix="fn" uri="jakarta.tags.functions" %>
 
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Quản lý danh mục | TechStore</title>
-    <link rel="stylesheet" href="${pageContext.request.contextPath}/css/style.css">
 </head>
-<body class="site-page">
-    <header class="site-header">
-        <div class="header-inner">
-            <a class="logo" href="${pageContext.request.contextPath}/home">Tech<span>Store</span></a>
-            <div class="header-account">
-                <span>Xin chào, <strong><c:out value="${sessionScope.account}"/></strong></span>
-                <form action="${pageContext.request.contextPath}/logout" method="post">
-                    <button class="btn btn-outline" type="submit">Đăng xuất</button>
-                </form>
-            </div>
-        </div>
-    </header>
-    <nav class="navbar" aria-label="Điều hướng chính">
-        <div class="nav-inner">
-            <a href="${pageContext.request.contextPath}/home">Trang chủ</a>
-            <a class="active" aria-current="page" href="${pageContext.request.contextPath}/categories">Quản lý danh mục</a>
-            <a href="${pageContext.request.contextPath}/home#reviews">Video đánh giá</a>
-            <a href="${pageContext.request.contextPath}/video">Video của tôi</a>
-        </div>
-    </nav>
+<body>
     <main class="page-container">
         <div class="page-heading"><h1>Quản lý danh mục</h1></div>
 
+        <c:if test="${not empty uploadError}">
+            <div class="error" role="alert"><c:out value="${uploadError}"/></div>
+        </c:if>
         <div class="category-forms">
             <section class="panel" aria-labelledby="add-heading">
                 <h2 id="add-heading">Thêm danh mục</h2>
-                <form action="${pageContext.request.contextPath}/categories" method="post" enctype="multipart/form-data">
+                <c:if test="${not empty addError}">
+                    <div class="error" role="alert"><c:out value="${addError}"/></div>
+                </c:if>
+                <form data-validate action="${pageContext.request.contextPath}/categories" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="add">
                     <div class="field">
-                        <label for="categoryName">Tên danh mục</label>
-                        <input type="text" name="name" id="categoryName" required>
+                        <label class="form-label" for="categoryName">Tên danh mục</label>
+                        <input class="form-control" type="text" name="name" id="categoryName" maxlength="255" data-not-blank value="${fn:escapeXml(addName)}" required>
                     </div>
                     <div class="field">
-                        <label for="categoryImage">Ảnh danh mục (không bắt buộc)</label>
-                        <input type="file" name="image" id="categoryImage" accept="image/png,image/jpeg,image/gif">
+                        <label class="form-label" for="categoryImage">Ảnh danh mục (không bắt buộc)</label>
+                        <input class="form-control" type="file" name="image" id="categoryImage" accept="image/png,image/jpeg,image/gif" data-max-bytes="2097152" data-file-message="Chỉ chấp nhận ảnh PNG, JPG hoặc GIF.">
                     </div>
-                    <button class="btn" type="submit">Thêm danh mục</button>
+                    <button class="btn btn-primary" type="submit">Thêm danh mục</button>
                 </form>
             </section>
             <section class="panel" aria-labelledby="edit-heading">
                 <h2 id="edit-heading">Sửa danh mục</h2>
-                <form action="${pageContext.request.contextPath}/categories" method="post" enctype="multipart/form-data">
+                <c:if test="${not empty editError}">
+                    <div class="error" role="alert"><c:out value="${editError}"/></div>
+                </c:if>
+                <form data-validate action="${pageContext.request.contextPath}/categories" method="post" enctype="multipart/form-data">
                     <input type="hidden" name="action" value="edit">
                     <div class="field">
-                        <label for="editId">Mã danh mục</label>
-                        <input type="number" name="id" id="editId" placeholder="Chọn nút Sửa trong bảng" readonly required>
+                        <label class="form-label" for="editId">Mã danh mục</label>
+                        <input class="form-control" type="number" name="id" id="editId" data-selection value="${editId}" placeholder="Chọn nút Sửa trong bảng" readonly required>
                     </div>
                     <div class="field">
-                        <label for="editName">Tên mới</label>
-                        <input type="text" name="name" id="editName" required>
+                        <label class="form-label" for="editName">Tên mới</label>
+                        <input class="form-control" type="text" name="name" id="editName" maxlength="255" data-not-blank value="${fn:escapeXml(editName)}" required>
                     </div>
                     <div class="field">
-                        <label for="editImage">Ảnh thay thế (không bắt buộc)</label>
-                        <input type="file" name="image" id="editImage" accept="image/png,image/jpeg,image/gif">
+                        <label class="form-label" for="editImage">Ảnh thay thế (không bắt buộc)</label>
+                        <input class="form-control" type="file" name="image" id="editImage" accept="image/png,image/jpeg,image/gif" data-max-bytes="2097152" data-file-message="Chỉ chấp nhận ảnh PNG, JPG hoặc GIF.">
                     </div>
                     <button class="btn btn-secondary" type="submit">Lưu thay đổi</button>
                 </form>
@@ -71,10 +59,13 @@
 
         <section class="panel" aria-labelledby="category-list">
             <h2 id="category-list">Danh sách danh mục</h2>
-            <form class="category-filter" action="${pageContext.request.contextPath}/categories" method="get">
+            <c:if test="${not empty searchError}">
+                <div class="error" role="alert"><c:out value="${searchError}"/></div>
+            </c:if>
+            <form class="category-filter" data-validate action="${pageContext.request.contextPath}/categories" method="get">
                 <div class="field">
-                    <label for="categoryKeyword">Tìm kiếm danh mục</label>
-                    <input type="text" name="keyword" id="categoryKeyword" placeholder="Nhập từ khóa">
+                    <label class="form-label" for="categoryKeyword">Tìm kiếm danh mục</label>
+                    <input class="form-control" type="text" name="keyword" id="categoryKeyword" maxlength="255" value="${fn:escapeXml(searchKeyword)}" placeholder="Nhập từ khóa">
                 </div>
                 <button class="btn btn-secondary" type="submit">Tìm kiếm</button>
                 <a class="btn btn-outline" href="${pageContext.request.contextPath}/categories">Xem tất cả</a>
@@ -84,8 +75,8 @@
                     <div class="empty-state"><p>Không có danh mục để hiển thị.</p></div>
                 </c:when>
                 <c:otherwise>
-                    <div class="table-wrapper" tabindex="0" role="region" aria-label="Bảng danh mục">
-                        <table class="category-table">
+                    <div class="table-responsive" tabindex="0" role="region" aria-label="Bảng danh mục">
+                        <table class="category-table table table-hover align-middle mb-0">
                             <thead>
                                 <tr>
                                     <th scope="col">STT</th>
@@ -130,16 +121,13 @@
             </c:choose>
         </section>
     </main>
-    <footer class="site-footer">
-        <strong>TechStore &copy; 2026</strong>
-        <p>Khám phá công nghệ cùng cộng đồng.</p>
-    </footer>
     <script>
         function editCategory(button) {
             document.getElementById("editId").value = button.dataset.id;
             const nameInput = document.getElementById("editName");
             nameInput.value = button.dataset.name;
             document.getElementById("editImage").value = "";
+            nameInput.form.dispatchEvent(new Event("reset"));
             nameInput.focus();
         }
     </script>
