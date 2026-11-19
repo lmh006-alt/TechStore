@@ -7,7 +7,17 @@ public interface UserService {
 
     User get(String username);
 
+    User getById(int userId);
+
     boolean register(String username, String password, String email, String fullname, String phone);
+
+    boolean updateProfile(int userId, String fullName, String phone);
+
+    boolean updateAvatar(int userId, String avatar);
+
+    boolean checkEmailUsedByOtherUser(String email, int userId);
+
+    boolean updateEmail(int userId, String email);
     
     boolean verifyOTP(String username, String otp);
     

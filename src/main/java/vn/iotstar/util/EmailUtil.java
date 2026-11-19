@@ -9,6 +9,20 @@ public class EmailUtil {
 
     public static void sendOTP(String recipient, String otp)
             throws MessagingException {
+        sendOTP(recipient, otp, "Ma OTP xac nhan tai khoan",
+                "Ma OTP cua ban la: " + otp
+                + "\nMa co hieu luc trong 5 phut.");
+    }
+
+    public static void sendEmailChangeOTP(String recipient, String otp)
+            throws MessagingException {
+        sendOTP(recipient, otp, "Ma OTP thay doi email TechStore",
+                "Ma OTP de xac nhan dia chi email moi cua ban la: " + otp
+                + "\nMa co hieu luc trong 5 phut.");
+    }
+
+    private static void sendOTP(String recipient, String otp,
+            String subject, String text) throws MessagingException {
 
         String sender = System.getenv("MAIL_USERNAME");
         String appPassword = System.getenv("MAIL_APP_PASSWORD");
@@ -40,11 +54,8 @@ public class EmailUtil {
             Message.RecipientType.TO,
             InternetAddress.parse(recipient)
         );
-        message.setSubject("Ma OTP xac nhan tai khoan");
-        message.setText(
-            "Ma OTP cua ban la: " + otp +
-            "\nMa co hieu luc trong 5 phut."
-        );
+        message.setSubject(subject);
+        message.setText(text);
 
         Transport.send(message);
     }

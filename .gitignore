@@ -23,3 +23,23 @@
 hs_err_pid*
 replay_pid*
 /target/
+# Local deployment scripts
+/run.ps1
+/run.bat
+
+# IDE configuration
+/.vscode/
+/.settings/
+/.project
+/.classpath
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Local temporary files
+*.tmp
+*.bak
+Thumbs.db
+.DS_Store

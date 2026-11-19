@@ -24,26 +24,7 @@ public class UserDaoImpl implements UserDao {
 
             try (ResultSet rs = ps.executeQuery()) {
                 if (rs.next()) {
-                    User user = new User();
-
-                    user.setId(rs.getInt("id"));
-                    user.setEmail(rs.getString("email"));
-                    user.setUserName(rs.getString("username"));
-                    user.setFullName(rs.getString("fullname"));
-                    user.setPassWord(rs.getString("password"));
-                    user.setAvatar(rs.getString("avatar"));
-                    user.setRoleid(rs.getInt("roleid"));
-                    user.setPhone(rs.getString("phone"));
-                    user.setCreatedDate(rs.getTimestamp("createdDate"));
-
-                    user.setActive(rs.getBoolean("is_active"));
-                    user.setOtpCode(rs.getString("otp_code"));
-                    user.setOtpExpiry(rs.getTimestamp("otp_expiry"));
-
-                    user.setResetOtpCode(rs.getString("reset_otp_code"));
-                    user.setResetOtpExpiry(rs.getTimestamp("reset_otp_expiry"));
-
-                    return user;
+                    return mapUser(rs);
                 }
             }
         } catch (Exception e) {
@@ -51,6 +32,44 @@ public class UserDaoImpl implements UserDao {
         }
 
         return null;
+    }
+
+    @Override
+    public User getById(int userId) {
+        String sql = "SELECT * FROM `User` WHERE id = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next() ? mapUser(rs) : null;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Loi truy van User theo id", e);
+        }
+    }
+
+    private User mapUser(ResultSet rs) throws java.sql.SQLException {
+        User user = new User();
+
+        user.setId(rs.getInt("id"));
+        user.setEmail(rs.getString("email"));
+        user.setUserName(rs.getString("username"));
+        user.setFullName(rs.getString("fullname"));
+        user.setPassWord(rs.getString("password"));
+        user.setAvatar(rs.getString("avatar"));
+        user.setRoleid(rs.getInt("roleid"));
+        user.setPhone(rs.getString("phone"));
+        user.setCreatedDate(rs.getTimestamp("createdDate"));
+        user.setActive(rs.getBoolean("is_active"));
+        user.setOtpCode(rs.getString("otp_code"));
+        user.setOtpExpiry(rs.getTimestamp("otp_expiry"));
+        user.setResetOtpCode(rs.getString("reset_otp_code"));
+        user.setResetOtpExpiry(rs.getTimestamp("reset_otp_expiry"));
+
+        return user;
     }
 
     @Override
@@ -67,6 +86,24 @@ public class UserDaoImpl implements UserDao {
             }
         } catch (Exception e) {
             throw new RuntimeException("Loi kiem tra email", e);
+        }
+    }
+
+    @Override
+    public boolean existsByEmailForOtherUser(String email, int userId) {
+        String sql = "SELECT id FROM `User` WHERE email = ? AND id <> ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setInt(2, userId);
+
+            try (ResultSet rs = ps.executeQuery()) {
+                return rs.next();
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Loi kiem tra email nguoi dung khac", e);
         }
     }
 
@@ -101,6 +138,65 @@ public class UserDaoImpl implements UserDao {
             return false;
         } catch (Exception e) {
             throw new RuntimeException("Loi them User", e);
+        }
+    }
+
+    @Override
+    public boolean updateProfile(int userId, String fullName, String phone) {
+        String sql = "UPDATE `User` SET fullname = ?, phone = ? WHERE id = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, fullName);
+            ps.setString(2, phone);
+            ps.setInt(3, userId);
+
+            if (ps.executeUpdate() > 0) {
+                return true;
+            }
+
+            try (PreparedStatement exists = conn.prepareStatement(
+                    "SELECT id FROM `User` WHERE id = ?")) {
+                exists.setInt(1, userId);
+                try (ResultSet rs = exists.executeQuery()) {
+                    return rs.next();
+                }
+            }
+        } catch (Exception e) {
+            throw new RuntimeException("Loi cap nhat thong tin User", e);
+        }
+    }
+
+    @Override
+    public boolean updateAvatar(int userId, String avatar) {
+        String sql = "UPDATE `User` SET avatar = ? WHERE id = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, avatar);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (Exception e) {
+            throw new RuntimeException("Loi cap nhat anh dai dien User", e);
+        }
+    }
+
+    @Override
+    public boolean updateEmail(int userId, String email) {
+        String sql = "UPDATE `User` SET email = ? WHERE id = ?";
+
+        try (Connection conn = new DBConnection().getConnection();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setString(1, email);
+            ps.setInt(2, userId);
+            return ps.executeUpdate() > 0;
+        } catch (SQLIntegrityConstraintViolationException e) {
+            return false;
+        } catch (Exception e) {
+            throw new RuntimeException("Loi cap nhat email User", e);
         }
     }
 

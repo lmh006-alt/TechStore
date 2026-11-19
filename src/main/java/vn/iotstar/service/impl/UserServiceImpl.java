@@ -3,6 +3,7 @@ package vn.iotstar.service.impl;
 
 import java.security.SecureRandom;
 import java.util.Date;
+import java.util.regex.Pattern;
 
 import vn.iotstar.dao.UserDao;
 import vn.iotstar.dao.impl.UserDaoImpl;
@@ -12,6 +13,11 @@ import vn.iotstar.util.PasswordUtil;
 import vn.iotstar.util.EmailUtil;
 
 public class UserServiceImpl implements UserService {
+
+    private static final Pattern EMAIL = Pattern.compile(
+            "[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?"
+            + "(?:\\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*");
+    private static final Pattern PHONE = Pattern.compile("\\+?[0-9][0-9 .()-]*");
 
     private final UserDao userDao = new UserDaoImpl();
 
@@ -34,6 +40,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public User getById(int userId) {
+        return userId > 0 ? userDao.getById(userId) : null;
+    }
+
+    @Override
     public boolean checkExistEmail(String email) {
         return userDao.existsByEmail(email);
     }
@@ -41,6 +52,53 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean checkExistUsername(String username) {
         return userDao.get(username) != null;
+    }
+
+    @Override
+    public boolean updateProfile(int userId, String fullName, String phone) {
+        if (userId <= 0 || fullName == null || fullName.isBlank()
+                || fullName.length() > 255) {
+            return false;
+        }
+
+        String normalizedPhone = phone == null || phone.isBlank()
+                ? null : phone.trim();
+        if (normalizedPhone != null
+                && (normalizedPhone.length() > 20
+                    || !PHONE.matcher(normalizedPhone).matches()
+                    || !normalizedPhone.replaceAll("[^0-9]", "")
+                            .matches("[0-9]{7,15}"))) {
+            return false;
+        }
+
+        return userDao.updateProfile(userId, fullName.trim(), normalizedPhone);
+    }
+
+    @Override
+    public boolean updateAvatar(int userId, String avatar) {
+        if (userId <= 0 || avatar == null || avatar.isBlank()
+                || avatar.length() > 255
+                || !avatar.startsWith("https://")) {
+            return false;
+        }
+        return userDao.updateAvatar(userId, avatar);
+    }
+
+    @Override
+    public boolean checkEmailUsedByOtherUser(String email, int userId) {
+        return email != null && userId > 0
+                && userDao.existsByEmailForOtherUser(email, userId);
+    }
+
+    @Override
+    public boolean updateEmail(int userId, String email) {
+        if (userId <= 0 || email == null || email.length() > 255
+                || !EMAIL.matcher(email).matches()
+                || checkEmailUsedByOtherUser(email, userId)) {
+            return false;
+        }
+
+        return userDao.updateEmail(userId, email);
     }
 
     @Override

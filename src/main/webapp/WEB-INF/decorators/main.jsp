@@ -71,6 +71,12 @@
                     Trang chủ
                 </a>
 
+                <a id="nav-profile" class="nav-link${currentPath eq '/profile' ? ' active' : ''}"
+                   aria-current="${currentPath eq '/profile' ? 'page' : 'false'}"
+                   href="${pageContext.request.contextPath}/profile">
+                    Hồ sơ cá nhân
+                </a>
+
                 <a class="nav-link${currentPath eq '/categories' ? ' active' : ''}"
                    aria-current="${currentPath eq '/categories' ? 'page' : 'false'}"
                    href="${pageContext.request.contextPath}/categories">
